@@ -8,6 +8,7 @@ kong:
   ports:
     - "18001:8001"
     - "18000:8000"
+    - "18443:8443"
 
 storage:
   image: busybox:buildroot-2014.02
