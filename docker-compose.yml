@@ -1,0 +1,48 @@
+cassandra:
+  image: mashape/cassandra
+
+kong:
+  image: vikingco/kong
+  links:
+    - cassandra
+  ports:
+    - "18001:8001"
+    - "18000:8000"
+
+storage:
+  image: busybox:buildroot-2014.02
+  volumes:
+    - /tmp/docker-kong-admin/data/static:/data/static
+    - /tmp/docker-kong-admin/data/media:/data/media
+
+pgsql:
+  image: postgres:9.4.4
+  volumes:
+    - /data/docker/docker-kong-admin-pgsql:/var/lib/postgresql/data
+
+redis:
+  image: redis:3.0.3
+
+app:
+  build: .
+  command: uwsgi
+  links:
+    - kong
+    - pgsql
+    - redis
+  volumes_from:
+    - storage
+  environment:
+    - DATABASE_URL=postgres://postgres@pgsql:5432/postgres
+    - REDIS_CACHE_URL=redis://redis:6379/1
+    - KONG_ADMIN_URL=http://kong:8001/
+    - STATIC_ROOT=/data/static
+
+web:
+  image: vikingco/nginx
+  ports:
+    - "7777:80"
+  links:
+    - app
+  volumes_from:
+    - storage
