@@ -20,7 +20,7 @@ BASE_DIR = environ.Path(__file__) - 3
 
 # Set default values and casting
 env = environ.Env(
-    DEBUG=(bool, True),
+    DEBUG=(bool, False),
 )
 
 # Reading .env file
