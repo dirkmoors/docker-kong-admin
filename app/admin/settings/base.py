@@ -51,7 +51,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'kong_admin'
+    'jsonfield2',
+    'django_ace',
+    'kong_admin',
 )
 
 MIDDLEWARE_CLASSES = (
